@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('image')->nullable();
-            $table->string('file');
+            $table->string('file')->default('default_file_path.mp3');
             $table->text('description')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
