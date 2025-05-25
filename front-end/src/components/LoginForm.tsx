@@ -59,7 +59,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
       }
 
       if (onSuccess) onSuccess();
-      else router.push("/dashboard");
+      else router.push("/");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

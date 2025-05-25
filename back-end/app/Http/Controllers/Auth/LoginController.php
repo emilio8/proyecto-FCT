@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -15,12 +17,21 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return response()->json(['message' => 'Login correcto']);
-            return response()->json(['token' => $token, 'user' => $user]);
+        // Buscar usuario por email
+        $user = User::where('email', $credentials['email'])->first();
+
+        // Verificar credenciales
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return response()->json(['message' => 'Credenciales incorrectas'], 401);
         }
 
-        return response()->json(['message' => 'Credenciales incorrectas'], 401);
+        // Crear token para la API
+        $token = $user->createToken('auth-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login correcto',
+            'token' => $token,
+            'user' => $user,
+        ]);
     }
 }

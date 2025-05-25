@@ -12,10 +12,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Middleware global
-        $middleware->append([
+        // Para APIs, no redirigir a login
+        $middleware->redirectGuestsTo('/api/unauthorized');
+        
+        // Configurar middleware para API con Sanctum
+        $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Http\Middleware\HandleCors::class, // Laravel 11 usa esto, no Fruitcake
+        ]);
+        
+        // Excluir CSRF de rutas API
+        $middleware->validateCsrfTokens(except: [
+            'api/*'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

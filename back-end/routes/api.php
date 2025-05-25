@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\SongsController;
 
-
-Route::middleware('web')->post('/login', [LoginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login']);
 Route::get('/songs', [SongsController::class, 'index']);
 Route::post('/songs', [SongsController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
