@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         // Para APIs, no redirigir a login
-        $middleware->redirectGuestsTo('/api/unauthorized');
+        // $middleware->redirectGuestsTo('/api/login');
         
         // Configurar middleware para API con Sanctum
         $middleware->api(prepend: [
@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'api/*'
         ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

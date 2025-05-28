@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Song } from "@/types/Songs/Song";
+import Link from "next/link";
 
 const SongList = () => {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -11,7 +12,14 @@ const SongList = () => {
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/songs");
+        const token = localStorage.getItem("authToken"); // Recupera el token del almacenamiento local
+
+        const response = await fetch("http://localhost:8000/api/songs", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`, // Incluye el token en el encabezado Authorization
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -40,16 +48,49 @@ const SongList = () => {
   }
 
   return (
-    <div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {songs.map((song) => (
-        <div key={song.title} className="song">
-          <h3>{song.title}</h3>
-          <img src={song.image} alt={song.title} />
-            <audio controls>
-            <source src={song.file} type="audio/mpeg" />
-            Tu navegador no soporta el elemento de audio.
+        <div
+          key={song.title}
+          className="bg-white shadow-md rounded-lg overflow-hidden"
+        >
+          {/* Imagen de la canción */}
+          <div className="w-full h-100">
+            <img
+              src={`http://localhost:8000/storage/${song.image}`}
+              alt={song.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="p-4">
+            {/* Título */}
+            <h3 className="text-lg font-bold mb-2">{song.title}</h3>
+            {/* Descripción */}
+            <p className="text-gray-700 mb-4">{song.description}</p>
+            {/* Reproductor de audio */}
+            <audio controls className="w-full mb-4">
+              <source
+                src={`http://localhost:8000/storage/${song.file}`}
+                type="audio/mpeg"
+              />
+              Tu navegador no soporta el elemento de audio.
             </audio>
-          <p>{song.description}</p>
+            {/* Enlace para ver más detalles */}
+            <Link
+              href={`/songs/show/${song.id}`}
+              className="text-blue-500 hover:underline"
+            >
+              Ver más detalles
+            </Link>
+            <div>
+              <Link
+              href={`/songs/edit/${song.id}`}
+              className="text-blue-500 hover:underline"
+              >
+              Editar canción
+              </Link>
+            </div>
+          </div>
         </div>
       ))}
     </div>

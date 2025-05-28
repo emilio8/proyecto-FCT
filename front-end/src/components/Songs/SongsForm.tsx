@@ -41,6 +41,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   if (form.description) formData.append("description", form.description);
 
   try {
+    const token = localStorage.getItem("authToken"); // Recupera el token del almacenamiento local
     await fetch("http://localhost:8000/sanctum/csrf-cookie", { credentials: "include" });
 
 const xsrfToken = getCookie("XSRF-TOKEN");
@@ -50,6 +51,7 @@ const response = await fetch("http://localhost:8000/api/songs", {
   credentials: "include",
   headers: {
     "X-XSRF-TOKEN": xsrfToken ? decodeURIComponent(xsrfToken) : "",
+    Authorization: `Bearer ${token}`, // Incluye el token en el encabezado Authorization
   },
   body: formData,
 });

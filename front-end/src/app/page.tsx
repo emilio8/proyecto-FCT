@@ -11,7 +11,13 @@ export default function Index() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        const token = localStorage.getItem("authToken"); // Recupera el token del almacenamiento local
+
         const response = await fetch("http://localhost:8000/api/user", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`, // Incluye el token en el encabezado Authorization
+          },
           credentials: "include",
         });
 

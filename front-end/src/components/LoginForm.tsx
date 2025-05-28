@@ -42,8 +42,8 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
       if (!xsrfToken) {
         throw new Error("No se pudo obtener el token CSRF");
       }
-      console.log("xsrfToken",xsrfToken);
-      console.log("decode xsrfToken",decodeURIComponent(xsrfToken));   
+      console.log("xsrfToken", xsrfToken);
+      console.log("decode xsrfToken", decodeURIComponent(xsrfToken));
       const response = await fetch("http://localhost:8000/api/login", {
         method: "POST",
         headers: {
@@ -58,6 +58,11 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         throw new Error(data.message || "Login fallido");
       }
 
+      if (typeof window !== "undefined") {
+        const data = await response.json();
+        localStorage.setItem("authToken", data.token); // Guarda el token en localStorage
+      }
+      
       if (onSuccess) onSuccess();
       else router.push("/");
     } catch (err) {

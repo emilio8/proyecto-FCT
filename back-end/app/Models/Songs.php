@@ -10,11 +10,10 @@ class Songs extends Model
 
     protected $fillable = [
         'title',
-        'artist',
-        'album',
-        'duration',
-        'genre',
-        // agrega aquí los campos que tenga tu tabla songs
+        'image',
+        'file',
+        'description',
+        'user_id',
     ];
 
     // Obtener todas las canciones
