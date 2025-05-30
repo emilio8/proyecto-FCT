@@ -1,5 +1,5 @@
 import Navbar from '../components/Navbar';
-import SongList from '../components/SongList';
+import SongList from '../components/Songs/SongList';
 
 export default function Index() {
   return (

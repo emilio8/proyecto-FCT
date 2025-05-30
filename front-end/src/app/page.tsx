@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
-import SongList from "../components/SongList";
+import SongList from "../components/Songs/SongList";
+import Header from "@/components/Header";
 
 export default function Index() {
   const router = useRouter();
@@ -33,7 +34,8 @@ export default function Index() {
   }, [router]);
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen">
+      <Header />
       <Navbar />
       <main className="mt-8">
         <SongList />

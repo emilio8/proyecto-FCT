@@ -100,6 +100,9 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         <button type="submit" className="bg-blue-600 text-white px-4 py-2">
           Iniciar sesión
         </button>
+        <p className="mt-4">
+          ¿No tienes una cuenta? <a href="/register" className="text-blue-600">Regístrate</a>
+        </p>
       </form>
     </div>
   );

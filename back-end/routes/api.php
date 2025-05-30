@@ -4,9 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\SongsController;
+use App\Http\Controllers\UserController;
 
 // Ruta pública para login
 Route::post('/login', [LoginController::class, 'login']);
+Route::post('/register', [UserController::class, 'store']);
 
 // Rutas protegidas con Sanctum
 Route::middleware('auth:sanctum')->group(function () {
@@ -18,6 +20,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::post('/user/{id}', [UserController::class, 'update']);
+    Route::get('/user/{id}', [UserController::class, 'show']);
+
 });
 // Aquí puedes añadir tus rutas protegidas, como canciones, perfiles, etc.
 ?>
