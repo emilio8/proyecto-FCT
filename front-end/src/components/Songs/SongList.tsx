@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Song } from "@/types/Songs/Song";
 import { useRouter } from "next/navigation";
+import Skeleton from "@/components/skeleton";
 
 const SongList = () => {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -41,7 +42,16 @@ const SongList = () => {
   }, []);
 
   if (loading) {
-    return <div className="text-center text-gray-600">Cargando canciones...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="text-center text-gray-600 mb-6 text-lg">Cargando canciones...</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton key={index} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -81,19 +91,13 @@ const SongList = () => {
                 />
                 Tu navegador no soporta el elemento de audio.
               </audio>
-              {/* Botones */}
-              <div className="flex items-center justify-between mt-4">
+              {/* Botón centrado */}
+              <div className="flex justify-center mt-4">
                 <button
                   onClick={() => router.push(`/songs/show/${song.id}`)}
-                  className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+                  className="bg-gray-800 text-white px-16 py-2 text-lg rounded-lg hover:bg-blue-600 transition-colors duration-300"
                 >
                   Ver más detalles
-                </button>
-                <button
-                  onClick={() => router.push(`/songs/edit/${song.id}`)}
-                  className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300"
-                >
-                  Editar canción
                 </button>
               </div>
             </div>

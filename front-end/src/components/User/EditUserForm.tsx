@@ -33,7 +33,8 @@ const EditUserForm = () => {
           throw new Error("Error al obtener los datos del usuario");
         }
 
-        const data = await response.json();
+                const data = await response.json();
+
         setUser(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Error desconocido");
@@ -96,7 +97,7 @@ const EditUserForm = () => {
   };
 
   if (loading) {
-    return <div>Cargando datos del usuario...</div>;
+    return <div className="text-center text-gray-600 text-xl">Cargando datos del usuario...</div>;
   }
 
   if (error) {

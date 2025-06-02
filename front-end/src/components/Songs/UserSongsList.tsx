@@ -51,7 +51,7 @@ const UserSongsList = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center text-gray-600">Cargando canciones...</div>;
+    return <div className="text-center text-gray-600 text-xl">Cargando datos del usuario...</div>;
   }
 
   if (error) {

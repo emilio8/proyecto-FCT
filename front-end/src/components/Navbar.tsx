@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Header from '@/components/Header';
+
 
 const Navbar = () => {
   const [userId, setUserId] = useState<string | null>(null);
@@ -37,7 +39,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="flex items-center justify-between p-4 bg-gray-900 text-white shadow-md">
+    <><Header /><nav className="flex items-center justify-between p-4 bg-gray-900 text-white shadow-md">
       {/* Enlaces de navegación izquierda */}
       <div className="flex space-x-6">
         <Link href="/" className="hover:text-gray-300 transition-colors">
@@ -45,6 +47,9 @@ const Navbar = () => {
         </Link>
         <Link href="/songs/create" className="hover:text-gray-300 transition-colors">
           Crear Canción
+        </Link>
+        <Link href={`/songs/user/${userId}`} className="hover:text-gray-300 transition-colors">
+          Mis Canciones
         </Link>
       </div>
 
@@ -61,7 +66,7 @@ const Navbar = () => {
           <span className="text-gray-500">Cargando...</span>
         )}
       </div>
-    </nav>
+    </nav></>
   );
 };
 

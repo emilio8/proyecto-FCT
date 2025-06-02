@@ -15,6 +15,7 @@ const EditSongForm = () => {
   const [existingFile, setExistingFile] = useState<string | null>(null); // URL del archivo existente
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true); // Estado de carga
   const router = useRouter();
   const params = useParams();
   const id = params.id; // Obtiene el parámetro `id` de la URL dinámica
@@ -36,6 +37,14 @@ const EditSongForm = () => {
         }
 
         const data = await response.json();
+        
+        // Verificar si el usuario autenticado es el propietario
+        const loggedInUserId = localStorage.getItem("userId"); // Suponiendo que el ID del usuario autenticado está en localStorage
+        if (data.user_id !== parseInt(loggedInUserId || "0", 10)) {
+          alert("No puedes editar canciones que no son tuyas.");
+          router.push("/"); // Redirigir al inicio
+          return;
+        }
         setForm({
           title: data.title,
           image: null, // No cargamos el archivo directamente
@@ -46,6 +55,8 @@ const EditSongForm = () => {
         setExistingFile(`${data.file}`); // URL del archivo existente
       } catch (err) {
         setError(err instanceof Error ? err.message : "Error desconocido");
+      } finally {
+        setLoading(false); // Finaliza la carga
       }
     };
 
@@ -109,7 +120,11 @@ const EditSongForm = () => {
     }
   };
 
-   return (
+  if (loading) {
+    return <div className="text-center text-gray-600 text-xl">Cargando datos de la canción...</div>;
+  }
+
+  return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6">
       <h2 className="text-2xl font-bold text-blue-800">Editar Canción</h2>
       {error && <div className="text-red-600 bg-red-100 p-2 rounded">{error}</div>}
@@ -132,7 +147,7 @@ const EditSongForm = () => {
       {existingImage && (
         <div>
           <p className="text-sm font-medium text-blue-700">Imagen actual:</p>
-          <img src={existingImage} alt="Imagen actual" className="w-full h-48 object-cover rounded-md mt-2" />
+          <img src={existingImage} alt="Imagen actual" className="w-full h-80 object-cover rounded-md mt-2" />
         </div>
       )}
       <div>

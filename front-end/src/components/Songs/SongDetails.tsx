@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import Link from "next/link";
 
 type Song = {
   id: number;
@@ -10,6 +9,7 @@ type Song = {
   description: string;
   image: string;
   file: string;
+  user_id: number; // ID del propietario de la canción
 };
 
 export default function SongDetails() {
@@ -53,12 +53,18 @@ export default function SongDetails() {
   }, [id, router]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="text-center text-gray-600 mb-6 text-lg">Cargando canciones...</div>
+    );
   }
 
   if (error) {
     return <div>Error: {error}</div>;
   }
+
+  // Verificar si el usuario autenticado es el propietario de la canción
+  const loggedInUserId = parseInt(localStorage.getItem("userId") || "0", 10);
+  const isOwner = song?.user_id === loggedInUserId;
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
@@ -74,42 +80,48 @@ export default function SongDetails() {
         Tu navegador no soporta el elemento de audio.
       </audio>
       <div className="mt-4 flex items-center justify-between">
-       <button
-          onClick={() => router.push(`/songs/edit/${song?.id}`)}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Editar canción
-        </button>
-        <button
-          onClick={async () => {
-            const confirmDelete = confirm("¿Estás seguro de que deseas borrar esta canción?");
-            if (!confirmDelete) return;
+        {/* Botón Editar canción */}
+        {isOwner && (
+          <button
+            onClick={() => router.push(`/songs/edit/${song?.id}`)}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Editar canción
+          </button>
+        )}
+        {/* Botón Eliminar canción */}
+        {isOwner && (
+          <button
+            onClick={async () => {
+              const confirmDelete = confirm("¿Estás seguro de que deseas borrar esta canción?");
+              if (!confirmDelete) return;
 
-            try {
-              const token = localStorage.getItem("authToken");
+              try {
+                const token = localStorage.getItem("authToken");
 
-              const response = await fetch(`http://localhost:8000/api/songs/${song?.id}`, {
-                method: "DELETE",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-                credentials: "include",
-              });
+                const response = await fetch(`http://localhost:8000/api/songs/${song?.id}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                  credentials: "include",
+                });
 
-              if (!response.ok) {
-                throw new Error("Error al borrar la canción");
+                if (!response.ok) {
+                  throw new Error("Error al borrar la canción");
+                }
+
+                alert("Canción borrada exitosamente");
+                router.push("/");
+              } catch (err) {
+                alert(err instanceof Error ? err.message : "Error desconocido");
               }
-
-              alert("Canción borrada exitosamente");
-              router.push("/songs");
-            } catch (err) {
-              alert(err instanceof Error ? err.message : "Error desconocido");
-            }
-          }}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-4"
-        >
-          Borrar canción
-        </button>
+            }}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ml-4"
+          >
+            Borrar canción
+          </button>
+        )}
       </div>
     </div>
   );

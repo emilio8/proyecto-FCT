@@ -24,5 +24,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/{id}', [UserController::class, 'show']);
 
 });
-// Aquí puedes añadir tus rutas protegidas, como canciones, perfiles, etc.
 ?>
