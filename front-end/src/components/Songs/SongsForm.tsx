@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Importa el hook useRouter
+import { useRouter } from "next/navigation";
 import { SongCreate } from "@/types/Songs/SongsCreate";
 
 const SongsForm = () => {
@@ -13,7 +13,7 @@ const SongsForm = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const router = useRouter(); // Inicializa el hook useRouter
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, files } = e.target as any;
@@ -43,7 +43,7 @@ const SongsForm = () => {
     if (form.description) formData.append("description", form.description);
 
     try {
-      const token = localStorage.getItem("authToken"); // Recupera el token del almacenamiento local
+      const token = localStorage.getItem("authToken");
       await fetch("http://localhost:8000/sanctum/csrf-cookie", { credentials: "include" });
 
       const xsrfToken = getCookie("XSRF-TOKEN");
@@ -53,7 +53,7 @@ const SongsForm = () => {
         credentials: "include",
         headers: {
           "X-XSRF-TOKEN": xsrfToken ? decodeURIComponent(xsrfToken) : "",
-          Authorization: `Bearer ${token}`, // Incluye el token en el encabezado Authorization
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
@@ -63,56 +63,91 @@ const SongsForm = () => {
         throw new Error(data.message || "Error al crear la canción");
       }
 
-      const data = await response.json(); // Obtén los datos de la canción creada
+      const data = await response.json();
       setSuccess("Canción creada correctamente");
       setForm({ title: "", image: null, file: null, description: "" });
 
-      router.push(`/songs/show/${data.id}`); // Redirige al show de la canción creada
+      router.push(`/songs/show/${data.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 space-y-4">
-      <h2 className="text-xl font-bold">Crear Canción</h2>
-      {error && <div className="text-red-600">{error}</div>}
-      {success && <div className="text-green-600">{success}</div>}
-      <input
-        type="text"
-        name="title"
-        placeholder="Título"
-        value={form.title}
-        onChange={handleChange}
-        required
-        className="w-full border p-2"
-      />
-      <input
-        type="file"
-        name="image"
-        accept="image/*"
-        onChange={handleChange}
-        className="w-full border p-2"
-      />
-      <input
-        type="file"
-        name="file"
-        accept="audio/*"
-        onChange={handleChange}
-        required
-        className="w-full border p-2"
-      />
-      <textarea
-        name="description"
-        placeholder="Descripción"
-        value={form.description}
-        onChange={handleChange}
-        className="w-full border p-2"
-      />
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2">
-        Crear Canción
-      </button>
-    </form>
+    <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+      <h1 className="text-2xl font-bold mb-4 text-center">Crear Canción</h1>
+      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+      {success && <p className="text-green-500 text-center mb-4">{success}</p>}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label htmlFor="title" className="block text-gray-700 font-medium mb-2">
+            Título
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Título"
+            value={form.title}
+            onChange={handleChange}
+            required
+            className="w-full border border-gray-300 rounded-lg px-4 py-2"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="image" className="block text-gray-700 font-medium mb-2">
+            Imagen
+          </label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="file" className="block text-gray-700 font-medium mb-2">
+            Archivo de Audio
+          </label>
+          <input
+            type="file"
+            id="file"
+            name="file"
+            accept="audio/*"
+            onChange={handleChange}
+            required
+            className="w-full border border-gray-300 rounded-lg px-4 py-2"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-gray-700 font-medium mb-2">
+            Descripción
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Descripción"
+            value={form.description}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2"
+          />
+        </div>
+
+        <div className="mt-6 text-center">
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Crear Canción
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

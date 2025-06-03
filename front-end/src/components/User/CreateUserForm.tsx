@@ -139,6 +139,14 @@ const CreateUserForm = () => {
             Registrar Usuario
           </button>
         </div>
+        <div>
+          <p className="text-gray-600 text-center mt-4">
+            ¿Ya tienes una cuenta?{" "}
+            <a href="/login" className="text-blue-500 hover:underline">
+              Iniciar sesión
+            </a>
+          </p>
+        </div>
       </form>
     </div>
   );

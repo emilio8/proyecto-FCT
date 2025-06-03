@@ -37,9 +37,9 @@ const EditSongForm = () => {
         }
 
         const data = await response.json();
-        
+
         // Verificar si el usuario autenticado es el propietario
-        const loggedInUserId = localStorage.getItem("userId"); // Suponiendo que el ID del usuario autenticado está en localStorage
+        const loggedInUserId = localStorage.getItem("userId");
         if (data.user_id !== parseInt(loggedInUserId || "0", 10)) {
           alert("No puedes editar canciones que no son tuyas.");
           router.push("/"); // Redirigir al inicio
@@ -125,12 +125,12 @@ const EditSongForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-blue-800">Editar Canción</h2>
-      {error && <div className="text-red-600 bg-red-100 p-2 rounded">{error}</div>}
-      {success && <div className="text-green-600 bg-green-100 p-2 rounded">{success}</div>}
+    <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 mt-10">
+      <h2 className="text-2xl font-bold mb-4 text-center">Editar Canción</h2>
+      {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+      {success && <div className="text-green-500 text-center mb-4">{success}</div>}
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-blue-700">
+        <label htmlFor="title" className="block text-gray-700 font-medium mb-2">
           Título
         </label>
         <input
@@ -141,17 +141,17 @@ const EditSongForm = () => {
           value={form.title}
           onChange={handleChange}
           required
-          className="w-full border border-blue-300 rounded-md p-2 mt-1"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
         />
       </div>
       {existingImage && (
-        <div>
-          <p className="text-sm font-medium text-blue-700">Imagen actual:</p>
-          <img src={existingImage} alt="Imagen actual" className="w-full h-80 object-cover rounded-md mt-2" />
+        <div className="mb-4">
+          <p className="text-gray-700 font-medium mb-2">Imagen actual:</p>
+          <img src={existingImage} alt="Imagen actual" className="w-full h-80 object-cover rounded-lg" />
         </div>
       )}
-      <div>
-        <label htmlFor="image" className="block text-sm font-medium text-blue-700">
+      <div className="mb-4">
+        <label htmlFor="image" className="block text-gray-700 font-medium mb-2">
           Cambiar imagen
         </label>
         <input
@@ -160,20 +160,20 @@ const EditSongForm = () => {
           name="image"
           accept="image/*"
           onChange={handleChange}
-          className="w-full border border-blue-300 rounded-md p-2 mt-1"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
         />
       </div>
       {existingFile && (
-        <div>
-          <p className="text-sm font-medium text-blue-700">Archivo de audio actual:</p>
-          <audio controls className="w-full mt-2">
+        <div className="mb-4">
+          <p className="text-gray-700 font-medium mb-2">Archivo de audio actual:</p>
+          <audio controls className="w-full">
             <source src={existingFile} type="audio/mpeg" />
             Tu navegador no soporta el elemento de audio.
           </audio>
         </div>
       )}
-      <div>
-        <label htmlFor="file" className="block text-sm font-medium text-blue-700">
+      <div className="mb-4">
+        <label htmlFor="file" className="block text-gray-700 font-medium mb-2">
           Cambiar archivo de audio
         </label>
         <input
@@ -182,11 +182,11 @@ const EditSongForm = () => {
           name="file"
           accept="audio/*"
           onChange={handleChange}
-          className="w-full border border-blue-300 rounded-md p-2 mt-1"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
         />
       </div>
-      <div>
-        <label htmlFor="description" className="block text-sm font-medium text-blue-700">
+      <div className="mb-4">
+        <label htmlFor="description" className="block text-gray-700 font-medium mb-2">
           Descripción
         </label>
         <textarea
@@ -195,12 +195,12 @@ const EditSongForm = () => {
           placeholder="Descripción"
           value={form.description}
           onChange={handleChange}
-          className="w-full border border-blue-300 rounded-md p-2 mt-1"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
         />
       </div>
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition"
+        className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
       >
         Actualizar Canción
       </button>

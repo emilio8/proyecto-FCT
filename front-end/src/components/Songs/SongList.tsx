@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Song } from "@/types/Songs/Song";
 import { useRouter } from "next/navigation";
-import Skeleton from "@/components/skeleton";
+import Skeleton from "@/components/Skeleton";
 
 const SongList = () => {
   const [songs, setSongs] = useState<Song[]>([]);

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Song } from "@/types/Songs/Song";
 import { useRouter, useParams } from "next/navigation";
+import Skeleton from "../Skeleton";
 
 const UserSongsList = () => {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -15,11 +16,18 @@ const UserSongsList = () => {
     const fetchSongs = async () => {
       try {
         const token = localStorage.getItem("authToken");
+        const userId = localStorage.getItem("userId");
 
         if (!token) {
           throw new Error("No se encontró el token de autenticación.");
         }
-
+        
+        // Verificar si el ID de la URL coincide con el userId del localStorage
+        if (parseInt(id || "0", 10) !== parseInt(userId, 10)) {
+          alert("No tienes permiso para acceder a esta página.");
+          router.push("/"); // Redirigir al inicio
+          return;
+        }
         const response = await fetch("http://localhost:8000/api/songs", {
           method: "GET",
           headers: {
@@ -51,8 +59,17 @@ const UserSongsList = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center text-gray-600 text-xl">Cargando datos del usuario...</div>;
-  }
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <div className="text-center text-gray-600 mb-6 text-lg">Cargando canciones...</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton key={index} />
+            ))}
+          </div>
+        </div>
+      );
+    }
 
   if (error) {
     return <div className="text-center text-red-500">Error: {error}</div>;

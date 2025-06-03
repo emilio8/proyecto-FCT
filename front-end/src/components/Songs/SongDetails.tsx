@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Skeleton from "../Skeleton";
 
 type Song = {
   id: number;
@@ -57,6 +58,7 @@ export default function SongDetails() {
       <div className="text-center text-gray-600 mb-6 text-lg">Cargando canciones...</div>
     );
   }
+
 
   if (error) {
     return <div>Error: {error}</div>;
