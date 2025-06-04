@@ -67,7 +67,7 @@ const SongList = () => {
             className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
           >
             {/* Imagen de la canción */}
-            <div className="w-full h-100 relative">
+            <div className="w-full h-135 relative">
               <img
                 src={`http://localhost:8000/storage/${song.image}`}
                 alt={song.title}

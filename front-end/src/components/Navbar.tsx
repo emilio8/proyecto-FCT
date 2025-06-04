@@ -75,7 +75,9 @@ const Navbar = () => {
             Perfil
           </Link>
         ) : (
-          <span className="text-gray-500">Cargando...</span>
+            <Link href="/login" className="hover:text-gray-300 transition-colors">
+            Iniciar Sesión
+            </Link>
         )}
       </div>
     </nav></>

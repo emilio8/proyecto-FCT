@@ -2,6 +2,8 @@ import EditUserForm from '@/components/User/EditUserForm';
 
 export default function EditUserPage() {
     return (
-        <EditUserForm />
+        <div className="container mx-auto py-8">
+            <EditUserForm />
+        </div>
     );
 }
