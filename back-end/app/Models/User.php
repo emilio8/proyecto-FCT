@@ -48,4 +48,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relación con el modelo Songs
+    public function songs()
+    {
+        return $this->hasMany(Songs::class);
+    }
 }

@@ -106,6 +106,9 @@ return (
               <source src={`http://localhost:8000/storage/${song.file}`} type="audio/mpeg" />
               Tu navegador no soporta el elemento de audio.
             </audio>
+            <p className="text-gray-700 text-sm mb-2">
+              Esta canción ha sido creada por <span className="font-bold">{song.user.name ?? "Desconocido"}</span>
+            </p>
             <div className="flex items-center justify-between mt-4">
               <button
                 onClick={() => router.push(`/songs/show/${song.id}`)}

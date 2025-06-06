@@ -16,6 +16,12 @@ class Songs extends Model
         'user_id',
     ];
 
+    // Relación con el modelo User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     // Obtener todas las canciones
     public static function getAllSongs()
     {

@@ -81,6 +81,9 @@ export default function SongDetails() {
         <source src={song?.file} type="audio/mpeg" />
         Tu navegador no soporta el elemento de audio.
       </audio>
+      <p className="text-gray-700 text-sm mb-2">
+        Esta canción ha sido creada por <span className="font-bold">{song.user.name ?? "Desconocido"}</span>
+      </p>
       <div className="mt-4 flex items-center justify-between">
         {/* Botón Editar canción */}
         {isOwner && (

@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Songs;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SongsController extends Controller
 {
     public function index()
     {
-        return response()->json(Songs::all());
+        $songs = Songs::with('user')->get();
+
+        return response()->json($songs);
     }
 
     public function store(Request $request)
@@ -48,7 +51,7 @@ class SongsController extends Controller
 
     public function show($id)
     {
-        $song = Songs::findOrFail($id);
+        $song = Songs::with('user')->findOrFail($id);
 
         // Agregar la URL completa para la imagen y el archivo
         $song->image = url('storage/' . $song->image);
@@ -59,30 +62,30 @@ class SongsController extends Controller
 
     public function update(Request $request, $id)
     {
-    $song = Songs::findOrFail($id);
+        $song = Songs::with('user')->findOrFail($id);
 
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048', // Validación para imágenes
-        'file' => 'nullable|file|mimes:mp3,wav|max:10240', // Validación para archivos de audio
-        'description' => 'nullable|string',
-    ]);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048', // Validación para imágenes
+            'file' => 'nullable|file|mimes:mp3,wav|max:10240', // Validación para archivos de audio
+            'description' => 'nullable|string',
+        ]);
 
-    // Si se envía una nueva imagen, reemplazar la existente
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('images', 'public');
-        $validated['image'] = $imagePath;
-    }
+        // Si se envía una nueva imagen, reemplazar la existente
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $validated['image'] = $imagePath;
+        }
 
-    // Si se envía un nuevo archivo de audio, reemplazar el existente
-    if ($request->hasFile('file')) {
-        $filePath = $request->file('file')->store('audio', 'public');
-        $validated['file'] = $filePath;
-    }
+        // Si se envía un nuevo archivo de audio, reemplazar el existente
+        if ($request->hasFile('file')) {
+            $filePath = $request->file('file')->store('audio', 'public');
+            $validated['file'] = $filePath;
+        }
 
-    // Actualizar los datos de la canción
-    $song->update($validated);
-        return response()->json($song);
+        // Actualizar los datos de la canción
+        $song->update($validated);
+            return response()->json($song);
     }
 
     public function destroy($id)
