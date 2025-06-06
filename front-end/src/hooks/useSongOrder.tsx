@@ -4,8 +4,6 @@ import { Song } from "@/types/Songs/Song";
 export type SortOption =
   | "newest"
   | "oldest"
-  | "duration-desc"
-  | "duration-asc"
   | "title-asc"
   | "title-desc"
   | "creador-asc"
