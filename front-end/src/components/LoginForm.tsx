@@ -33,6 +33,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
     formData.append("email", email);
     formData.append("password", password);
 
+    // Verifica si el navegador es compatible con cookies
     try {
       await fetch("http://localhost:8000/sanctum/csrf-cookie", {
         credentials: "include",
@@ -43,6 +44,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         throw new Error("No se pudo obtener el token CSRF");
       }
 
+      // Realiza la solicitud de inicio de sesión
       const response = await fetch("http://localhost:8000/api/login", {
         method: "POST",
         headers: {
